@@ -1,0 +1,46 @@
+{
+    "name": "@elizaos/core-plugin-v1",
+    "version": "0.25.9",
+    "description": "",
+    "type": "module",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "import": {
+                "@elizaos/source": "./src/index.ts",
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "watch": "tsc --watch",
+        "dev": "tsup --format esm --dts --watch",
+        "build:docs": "cd docs && pnpm run build",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "test:watch": "vitest"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "22.8.4",
+        "tsup": "8.3.5",
+        "typescript": "5.6.3"
+    },
+    "dependencies": {
+        "@elizaos/core": "workspace:*",
+        "ai": "4.1.54",
+        "pino": "^9.6.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
