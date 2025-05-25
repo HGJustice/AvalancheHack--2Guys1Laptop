@@ -1,5 +1,8 @@
 # Snow
 
+![17481342529751473039211395965834](https://github.com/user-attachments/assets/88dd2479-24e8-45ac-9974-41379ed41a0c)
+
+
 **Nigel, your Web3 DeFi AI Companion on Telegram**
 
 Snow is a Telegram-based AI agent built to onboard DeFi newbies and help them make **smart and safe investments** in the Web3 world. Nigel—the personality behind Snow—runs on ElizaOS and leverages real-time market sentiment data from **Chainlink** to guide users through the AVAX C-Chain (starting with Fuji testnet).
