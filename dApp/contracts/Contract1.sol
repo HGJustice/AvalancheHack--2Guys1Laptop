@@ -2,7 +2,9 @@
 
 pragma solidity 0.8.26;
 
-contract Contract1 {
+import "./FearAndGreedIndexConsumer.sol";
+
+contract Contract1 is FearAndGreedIndexConsumer {
     uint256 public interestRate = 3;
 
     event InterestChanged(uint256 newInterest);

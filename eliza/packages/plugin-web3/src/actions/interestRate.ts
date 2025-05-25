@@ -17,9 +17,23 @@ let ContractABIMap = new Map([
     [process.env.CONTRACT1, Contract1ABI],
     [process.env.CONTRACT2, Contract2ABI],
 ]);
+
+function getMultiplier(index, lpType): number {
+    if (lpType == "stable") {
+        if (index > 50) {
+            return 1;
+        }
+        return 3;
+    }
+    if (index > 50) {
+        return 2;
+    }
+    return 0.8;
+}
+
 async function analyseAndProcess() {
     const account = privateKeyToAccount(
-        process.env.PRIVATE_KEY as `0x${string}`
+        process.env.PRIVATE_KEY as `0x${string}`,
     );
     const publicClient = createPublicClient({
         chain: avalancheFuji,
@@ -30,7 +44,18 @@ async function analyseAndProcess() {
         chain: avalancheFuji,
         transport: http(process.env.PROVIDER),
     });
-
+    let indexConsumerContract = process.env.CONTRACT1;
+    const updateIndex = await client.writeContract({
+        address: indexConsumerContract as `0x${string}`,
+        abi: ContractABIMap.get(indexConsumerContract),
+        functionName: "sendRequest",
+        args: [],
+    } as any);
+    const currentIndex = await publicClient.readContract({
+        address: indexConsumerContract as `0x${string}`,
+        abi: ContractABIMap.get(indexConsumerContract),
+        functionName: "index",
+    } as any);
     //compare find highest
     let bestContract = listContracts[0];
     let bestRate = 0;
@@ -42,9 +67,15 @@ async function analyseAndProcess() {
             abi: ContractABIMap.get(contract),
             functionName: "interestRate",
         } as any);
+        const lpType = await publicClient.readContract({
+            address: contract as `0x${string}`,
+            abi: ContractABIMap.get(contract),
+            functionName: "lpType",
+        } as any);
         console.log(interestRate);
 
-        let interestRateNb = Number(interestRate);
+        let interestRateNb =
+            Number(interestRate) * getMultiplier(Number(currentIndex), lpType);
         if (interestRateNb > bestRate) {
             bestRate = interestRateNb;
             bestContract = contract;
@@ -54,7 +85,7 @@ async function analyseAndProcess() {
     // send x tokens to the highest contract
     const hash = await client.sendTransaction({
         to: bestContract as `0x${string}`,
-        value: parseEther("2"), // Convert string like "0.1" to wei
+        value: parseEther("0.02"), // Convert string like "0.1" to wei
     } as any);
     return { hash };
 }
@@ -80,7 +111,7 @@ export const investInterestAction: Action = {
         message: Memory,
         _state?: any,
         _options?: any,
-        callback?: HandlerCallback
+        callback?: HandlerCallback,
     ): Promise<boolean> => {
         let hash = await analyseAndProcess();
         console.log({ hash });
