@@ -19,6 +19,8 @@ Snow is a Telegram-based AI agent built to onboard DeFi newbies and help them ma
 
 ## How it Works
 
+![1000005713](https://github.com/user-attachments/assets/1854005e-149c-476f-8404-1c7ca1f21aac)
+
 Olaf connects various decentralized components to provide intelligent, real-time investment advice:
 
 1. **Fetch Market Sentiment**:
